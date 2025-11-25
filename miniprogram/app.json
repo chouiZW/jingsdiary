@@ -1,0 +1,34 @@
+{
+  "pages": [
+    "pages/calendar/calendar",
+    "pages/logs/logs",
+    "pages/todo/todo",
+    "pages/chart/chart",
+    "pages/register/register"
+  ],
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/calendar/calendar",
+        "text": "日历"
+      },
+      {
+        "pagePath": "pages/chart/chart",
+        "text": "体重曲线"
+      },
+      {
+        "pagePath": "pages/todo/todo",
+        "text": "待办"
+      }
+    ]
+  },
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "静的生活日历",
+    "navigationBarBackgroundColor": "#ffffff"
+  },
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

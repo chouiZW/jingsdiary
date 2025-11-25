@@ -1,0 +1,15 @@
+miniprogram/miniprogram_npm/
+# Windows
+[Dd]esktop.ini
+miniprogram/Thumbs.db
+$RECYCLE.BIN/
+
+# macOS
+miniprogram/.DS_Store
+miniprogram/.fseventsd
+miniprogram/.Spotlight-V100
+miniprogram/.TemporaryItems
+miniprogram/.Trashes
+
+# Node.js
+miniprogram/node_modules/

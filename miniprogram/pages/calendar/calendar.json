@@ -1,0 +1,12 @@
+{
+    "component": true,
+    "styleIsolation": "apply-shared",
+    "enablePullDownRefresh": true, 
+    "usingComponents": {
+        "t-calendar": "tdesign-miniprogram/calendar/calendar",
+        "t-fab": "tdesign-miniprogram/fab/fab",
+        "t-icon": "tdesign-miniprogram/icon/icon",
+        "t-dialog": "tdesign-miniprogram/dialog/dialog",
+        "t-input": "tdesign-miniprogram/input/input"
+    }
+}

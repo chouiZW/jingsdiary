@@ -1,0 +1,81 @@
+<view class="container">
+  <!-- 头部区域 -->
+  <view class="header">
+    <view class="title">我的待办事项</view>
+    <view class="subtitle">高效管理你的每日任务</view>
+  </view>
+
+  <!-- 添加待办区域 -->
+  <view class="add-todo">
+    <t-input
+      value="{{newTodoText}}"
+      placeholder="添加新的待办事项..."
+      bind:change="onInputChange"
+      class="todo-input"
+    />
+    <t-button theme="primary" bind:tap="addTodo" class="add-btn">添加</t-button>
+  </view>
+
+  <!-- 筛选和搜索区域 -->
+  <view class="filter-bar">
+    <view class="filter-options">
+      <t-tag
+        wx:for="{{filterOptions}}"
+        wx:key="key"
+        class="filter-tag {{currentFilter === item.key ? 'active' : ''}}"
+        bind:tap="changeFilter"
+        data-key="{{item.key}}"
+      >
+        {{item.text}}
+      </t-tag>
+    </view>
+    <view class="search-box">
+      <t-input
+        value="{{searchText}}"
+        placeholder="搜索..."
+        bind:change="onSearchChange"
+        prefix-icon="search"
+        class="search-input"
+      />
+    </view>
+  </view>
+
+  <!-- 待办事项列表 -->
+  <view class="todo-list">
+    <t-loading wx:if="{{loading}}" class="loading"></t-loading>
+    
+    <view wx:else>
+      <t-empty
+        wx:if="{{filteredTodos.length === 0}}"
+        description="暂无待办事项"
+        image="https://tdesign.gtimg.com/miniprogram/empty__demo-image.png"
+      ></t-empty>
+      
+      <view wx:else class="todo-items">
+        <view 
+          wx:for="{{filteredTodos}}" 
+          wx:key="id" 
+          class="todo-item {{item.completed ? 'completed' : ''}}"
+        >
+          <view class="todo-checkbox" bind:tap="toggleTodo" data-id="{{item.id}}">
+            <t-icon wx:if="{{item.completed}}" name="check-circle-filled" color="#0052d9" />
+            <t-icon wx:else name="circle" color="#d9d9d9" />
+          </view>
+          <view class="todo-content">
+            <view class="todo-text">{{item.text}}</view>
+            <view class="todo-meta">创建于 {{item.date}}</view>
+          </view>
+          <view class="todo-actions">
+            <t-icon name="delete" color="#999" bind:tap="deleteTodo" data-id="{{item.id}}" />
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats">
+    <view class="stat-item">总任务: {{totalCount}}</view>
+    <view class="stat-item">已完成: {{completedCount}}</view>
+  </view>
+</view>

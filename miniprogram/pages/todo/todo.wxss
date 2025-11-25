@@ -1,0 +1,140 @@
+.container {
+    padding: 32rpx;
+    background-color: #f5f7fa;
+    min-height: 100vh;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 48rpx;
+  }
+  
+  .title {
+    font-size: 48rpx;
+    font-weight: bold;
+    color: #0052d9;
+    margin-bottom: 16rpx;
+  }
+  
+  .subtitle {
+    font-size: 28rpx;
+    color: #666;
+  }
+  
+  .add-todo {
+    display: flex;
+    margin-bottom: 32rpx;
+    background: white;
+    border-radius: 16rpx;
+    padding: 32rpx;
+    box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.06);
+  }
+  
+  .todo-input {
+    flex: 1;
+    margin-right: 24rpx;
+  }
+  
+  .add-btn {
+    width: 160rpx;
+  }
+  
+  .filter-bar {
+    display: flex;
+    margin-bottom: 32rpx;
+    background: white;
+    border-radius: 16rpx;
+    padding: 32rpx;
+    box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.06);
+    align-items: center;
+  }
+  
+  .filter-options {
+    display: flex;
+    flex: 1;
+  }
+  
+  .filter-tag {
+    margin-right: 16rpx;
+  }
+  
+  .filter-tag.active {
+    background-color: #0052d9;
+    color: white;
+  }
+  
+  .search-box {
+    width: 300rpx;
+  }
+  
+  .search-input {
+    background-color: #f5f7fa;
+  }
+  
+  .todo-list {
+    background: white;
+    border-radius: 16rpx;
+    overflow: hidden;
+    box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.06);
+    margin-bottom: 32rpx;
+    min-height: 400rpx;
+  }
+  
+  .loading {
+    display: flex;
+    justify-content: center;
+    padding: 80rpx 0;
+  }
+  
+  .todo-item {
+    display: flex;
+    align-items: center;
+    padding: 32rpx;
+    border-bottom: 1rpx solid #f0f0f0;
+  }
+  
+  .todo-item:last-child {
+    border-bottom: none;
+  }
+  
+  .todo-checkbox {
+    margin-right: 24rpx;
+  }
+  
+  .todo-content {
+    flex: 1;
+  }
+  
+  .todo-text {
+    font-size: 32rpx;
+    margin-bottom: 8rpx;
+  }
+  
+  .todo-text.completed {
+    text-decoration: line-through;
+    color: #999;
+  }
+  
+  .todo-meta {
+    font-size: 24rpx;
+    color: #999;
+  }
+  
+  .todo-actions {
+    display: flex;
+    align-items: center;
+  }
+  
+  .stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 28rpx;
+    color: #666;
+  }
+  
+  .stat-item {
+    background: white;
+    padding: 24rpx 32rpx;
+    border-radius: 16rpx;
+    box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.06);
+  }

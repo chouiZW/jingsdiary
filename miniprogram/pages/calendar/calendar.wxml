@@ -1,0 +1,27 @@
+<!--pages/calendar.wxml-->
+<!-- <text>pages/calendar.wxml</text> -->
+<view scroll-y>
+    <t-calendar title="" use-popup="{{false}}" minDate="{{minDate}}" format="{{formatCalendar}}" type="multiple" switch-mode="month" bind:select="handleSelect" value="{{selectedDates}}" bind:panel-change="handlePanelChange"/>
+
+
+    <t-fab customStyle="{{scrolling ? 'right: 0;bottom:64px;' : 'right:16px;bottom:24px'}}">
+        <view wx:if="{{!scrolling}}" class="wrap">
+            <view class="item" wx:for="{{tfabuttons}}" wx:key="id" wx:if="{{item.show}}" data-id="{{item.id}}" bind:tap="handleBtnTap">
+                <t-icon name="{{item.icon}}" size="20" />
+                <view class="text">{{item.text}}</view>
+            </view>
+        </view>
+        <view wx:else class="symbol">
+            <t-icon name="chevron-left" size="20" />
+        </view>
+    </t-fab>
+    <!-- <t-fab icon="star" bind:click="markDate" text="标记" /> -->
+
+    <t-dialog title="输入标记内容" confirm-btn="确定" cancel-btn="取消" visible="{{showMarkDialog}}" bind:confirm="onConfirmInput" bind:cancel="onCancelInput">
+        <t-input borderless value="{{currentMark}}" class="dialog-input" maxlength="{{2}}" clearable slot="content" placeholder="最大两个字符" placeholder-class="placeholder" bind:change="onInputChange" />
+    </t-dialog>
+    <!-- todo -->
+    <t-dialog title="输入今日体重" confirm-btn="确定" cancel-btn="取消" visible="{{showWeightDialog}}" bind:confirm="onConfirmWeightInput" bind:cancel="onCancelWeightInput">
+        <t-input borderless value="{{currentWeight}}" type="digit" class="dialog-input" maxlength="{{5}}" clearable slot="content" placeholder="输入体重" placeholder-class="placeholder" bind:change="onInputWeightChange" />
+    </t-dialog>
+</view>
