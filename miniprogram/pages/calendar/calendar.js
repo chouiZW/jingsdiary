@@ -1,5 +1,6 @@
 // pages/calendar.js
 const util = require('../../utils/util.js')
+import Message from 'tdesign-miniprogram/message/index';
 Page({
 
     /**
@@ -8,11 +9,6 @@ Page({
     data: {
         scrolling: false,
         timer: null,
-        tfabuttons: [
-            { id: 1, icon: "add-circle", text: "待办", show: true },
-            { id: 2, icon: "star", text: "标记", show: true },
-            { id: 3, icon: "flag-2", text: "体重", show: true },
-        ],
         monthMarks: [],
         currentMark: '',
         currentWeight: undefined,
@@ -22,7 +18,8 @@ Page({
         showWeightDialog: false,
         value: '../calendar/calendar',
         minDate: util.getMinDate().getTime(),
-        maxDate: util.getMaxDate().getTime()
+        maxDate: util.getMaxDate().getTime(),
+        popupVisible: true,
     },
     formatCalendar(day) {
         const { date } = day;
@@ -121,43 +118,21 @@ Page({
     },
     handleSelect(e) {
         const { value } = e.detail;
-        this.data.selectedDates = value;
-        if (value.length == 1) {
-            this.setData({
-                tfabuttons: this.data.tfabuttons.map(button => ({
-                    ...button,
-                    show: true
-                }))
-            });
-        } else if (value.length > 1) {
-            const targetIds = new Set([1, 3]); // 使用Set提高查找性能
-            this.setData({
-                tfabuttons: this.data.tfabuttons.map(button =>
-                    targetIds.has(button.id) ? { ...button, show: false } : button
-                )
-            });
-        } else {
-            this.setData({
-                tfabuttons: this.data.tfabuttons.map(button => ({
-                    ...button,
-                    show: false
-                }))
-            });
-        }
+        // this.data.selectedDates = value;
+        this.setData({
+            selectedDates: value
+        })
         console.log(value);
     },
-    handleBtnTap(e) {
-        if (1 === e.currentTarget.dataset.id) {
-            this.addTodoList();
-        } else if (2 === e.currentTarget.dataset.id) {
-            this.markDate();
-        } else if (3 === e.currentTarget.dataset.id) {
-            this.recordWeight();
-        }
-    },
     addTodoList() {
-        console.log('add todo');
-        console.log(this.data.selectedDates);
+        Message.info({
+            context: this,
+            offset: [90, 32],
+            duration: 5000,
+            icon: false,
+            // single: false, // 打开注释体验多个消息叠加效果
+            content: '待办还处于待办状态',
+          });
     },
     markDate() {
         console.log('mark date');
@@ -269,4 +244,9 @@ Page({
         })
         console.log('year: ', year, 'month: ', month);
     },
+    onVisibleChange(e) {
+        this.setData({
+          popupVisible: e.detail.visible,
+        });
+    }
 })
