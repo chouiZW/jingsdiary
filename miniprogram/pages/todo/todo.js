@@ -9,10 +9,6 @@ Page({
         { key: 'completed', text: '已完成' }
       ],
       todos: [
-        { id: 1, text: '完成项目报告', completed: false, date: '2023-04-10' },
-        { id: 2, text: '购买groceries', completed: true, date: '2023-04-09' },
-        { id: 3, text: '准备会议材料', completed: false, date: '2023-04-11' },
-        { id: 4, text: '回复客户邮件', completed: false, date: '2023-04-10' }
       ],
       filteredTodos: [],
       totalCount: 0,

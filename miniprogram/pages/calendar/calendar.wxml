@@ -1,17 +1,55 @@
 <!--pages/calendar.wxml-->
 <!-- <text>pages/calendar.wxml</text> -->
 <view scroll-y>
-    <t-calendar title="" use-popup="{{false}}" minDate="{{minDate}}" format="{{formatCalendar}}" type="multiple" switch-mode="month" bind:select="handleSelect" value="{{selectedDates}}" bind:panel-change="handlePanelChange" />
+    <view class="calendar-card">
+        <t-calendar title="" use-popup="{{false}}" minDate="{{minDate}}" format="{{formatCalendar}}" type="multiple" switch-mode="month" bind:select="handleSelect" value="{{selectedDates}}" bind:panel-change="handlePanelChange" />
+    </view>
+    <view class="calendar-card edit-button">
+        <t-button theme="light" size="large" bind:tap="recordWeight" data-type="confirm" disabled="{{selectedDates.length != 1 }}">
+            记录体重
+        </t-button>
+        <t-button theme="light" size="large" bind:tap="markDate" data-type="cancel" disabled="{{selectedDates.length === 0 }}">
+            添加标记
+        </t-button>
+        <!-- <t-button theme="light" size="large" bind:tap="addTodoList" data-type="reset" disabled = "{{selectedDates.length != 1 }}">
+            添加待办
+        </t-button> -->
+    </view>
+    <!-- 新增：体重记录卡片 -->
+    <view class="weight-card">
+        <view class="weight-card__content">
+            <!-- 当日体重 -->
+            <view class="weight-item">
+                <view class="weight-label">当日体重</view>
+                <view class="weight-value">
+                    <span class="weight-number">{{today.weight}}</span>
+                    <span class="weight-unit">斤</span>
+                </view>
+            </view>
 
+            <!-- 分隔线 -->
+            <view class="weight-divider"></view>
+
+            <!-- 较前日变化 -->
+            <view class="weight-item">
+                <view class="weight-label">较前日变化</view>
+                <view class="weight-change {{'weight-change--' + changeType}}">
+                    <i class="iconfont icon-arrow-down"></i>
+                    <span class="change-value">{{today.weightChange}}</span>
+                    <!-- <span class="weight-unit">斤</span> -->
+                </view>
+            </view>
+        </view>
+    </view>
     <t-dialog title="输入标记内容" confirm-btn="确定" cancel-btn="取消" visible="{{showMarkDialog}}" bind:confirm="onConfirmInput" bind:cancel="onCancelInput">
         <t-input borderless value="{{currentMark}}" class="dialog-input" maxlength="{{2}}" clearable slot="content" placeholder="最大两个字符" placeholder-class="placeholder" bind:change="onInputChange" />
     </t-dialog>
     <!-- todo -->
     <t-dialog title="输入今日体重" confirm-btn="确定" cancel-btn="取消" visible="{{showWeightDialog}}" bind:confirm="onConfirmWeightInput" bind:cancel="onCancelWeightInput">
-        <t-input borderless value="{{currentWeight}}" type="digit" class="dialog-input" maxlength="{{5}}" clearable slot="content" placeholder="输入体重" placeholder-class="placeholder" bind:change="onInputWeightChange" />
+        <t-input borderless value="{{currentWeight}}" type="digit" class="dialog-input" maxlength="{{5}}" clearable slot="content" placeholder="输入体重" suffix="斤" placeholder-class="placeholder" bind:change="onInputWeightChange" />
     </t-dialog>
 
-    <view class="floating-btn-container">
+    <!-- <view class="floating-btn-container">
         <t-button theme="light" size="large" bind:tap="recordWeight" data-type="confirm" disabled = "{{selectedDates.length != 1 }}">
             记录体重
         </t-button>
@@ -21,6 +59,6 @@
         <t-button theme="light" size="large" bind:tap="addTodoList" data-type="reset" disabled = "{{selectedDates.length != 1 }}">
             添加待办
         </t-button>
-    </view>
+    </view> -->
     <t-message id="t-message" />
 </view>
