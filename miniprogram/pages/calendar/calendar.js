@@ -16,10 +16,11 @@ Page({
         formatCalendar: null,
         showMarkDialog: false,
         showWeightDialog: false,
-        value: '../calendar/calendar',
         minDate: util.getMinDate().getTime(),
         maxDate: util.getMaxDate().getTime(),
         popupVisible: true,
+        today: {},
+        changeType: 'same' // 初始为不变状态
     },
     formatCalendar(day) {
         const { date } = day;
@@ -70,6 +71,7 @@ Page({
             selectedDates: [today.getTime()]
         })
         this.data.selectedDates.push(today.getTime());
+        this.calcWeightChange(today);
     },
 
     /**
@@ -100,7 +102,6 @@ Page({
         for (let day = 1; day <= daysInMonth; day++) {
             const date = new Date(year, month, day);
             const existingMark = months.find(item => item.day === date.getTime());
-
             if (!existingMark) {
                 newMarks.push({
                     day: date.getTime(),
@@ -115,6 +116,38 @@ Page({
             monthMarks: finalMarks
         });
         wx.setStorageSync('monthMarks', finalMarks);
+    },
+    calcWeightChange(day){
+        const currentDate = new Date(day);
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        currentDate.setHours(0, 0, 0, 0);
+        let yesterday = new Date(currentDate);
+        yesterday.setDate(currentDate.getDate() -1);
+        let changeType = 'same';
+        const todayWeight ={...this.data.monthMarks.find(item => item.day === currentDate.getTime()), weightChange:'-'};
+        const yesterdayWeight = {...this.data.monthMarks.find(item => item.day === yesterday.getTime())};
+        if(!todayWeight.weight) {
+            todayWeight.weight = '-';
+            todayWeight.weightChange = '-';
+            this.setData({
+                today: todayWeight,
+                changeType: changeType
+            })
+            return;
+        }
+        const diff = todayWeight.weight - yesterdayWeight.weight;
+        if(diff > 0) {
+            todayWeight.weightChange = '上升'
+            changeType = 'up';
+        } else if (diff < 0) {
+            todayWeight.weightChange = '下降'
+            changeType = 'down';
+        }
+        this.setData({
+            today: todayWeight,
+            changeType: changeType
+        })
     },
     handleSelect(e) {
         const { value } = e.detail;
@@ -226,8 +259,9 @@ Page({
             ), ...newMarks],
             showWeightDialog: false,
             selectedDates: []
-        });
+        }); 
         wx.setStorageSync('monthMarks', this.data.monthMarks);
+        this.calcWeightChange(new Date());
     },
     onCancelWeightInput() {
         this.setData({
