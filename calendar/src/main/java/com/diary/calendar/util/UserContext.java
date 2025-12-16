@@ -1,7 +1,5 @@
 package com.diary.calendar.util;
 
-import com.diary.calendar.entity.UserEntity;
-
 public class UserContext {
     private static final ThreadLocal<Integer> CURRENT_USER_ID = new ThreadLocal<>();
 

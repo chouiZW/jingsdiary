@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class HealthRecordDTO {
 
+    private Integer userId;
     private Date targetDate;
     private Float weight;
     private String cookbook;

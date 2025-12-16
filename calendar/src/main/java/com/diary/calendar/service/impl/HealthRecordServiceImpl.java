@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.diary.calendar.dto.CalendarBaseDTO;
 import com.diary.calendar.dto.HealthRecordDTO;
 import com.diary.calendar.entity.HealthRecordEntity;
-import com.diary.calendar.entity.UserEntity;
 import com.diary.calendar.mapper.HealthRecordMapper;
 import com.diary.calendar.service.HealthRecordService;
 import com.diary.calendar.util.EntityToVoConverter;
@@ -29,25 +28,13 @@ public class HealthRecordServiceImpl extends ServiceImpl<HealthRecordMapper, Hea
     public HealthRecordVO getHealthRecordByDate(CalendarBaseDTO calendarBaseDTO) {
         Integer userId = UserContext.getCurrentUserId();
         LambdaQueryWrapper<HealthRecordEntity> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(HealthRecordEntity::getUserId, calendarBaseDTO.getUserId())
+        wrapper.eq(HealthRecordEntity::getUserId, userId)
                 .eq(HealthRecordEntity::getTargetDate, calendarBaseDTO.getTargetDate());
         HealthRecordEntity entity = healthRecordMapper.selectOne(wrapper);
-        // 获取当天之前的最新一条健康记录，用于记录体重差值
-        HealthRecordEntity previousRecord = healthRecordMapper.selectOne(
-                new LambdaQueryWrapper<HealthRecordEntity>()
-                        .eq(HealthRecordEntity::getUserId, userId)
-                        .lt(HealthRecordEntity::getTargetDate, calendarBaseDTO.getTargetDate())
-                        .orderByDesc(HealthRecordEntity::getTargetDate)
-                        .last("LIMIT 1"));
         if (entity == null) {
             return null;
         } else {
             HealthRecordVO resultvo = EntityToVoConverter.convertSingle(entity, HealthRecordVO.class);
-            if (Objects.nonNull(previousRecord) && Objects.nonNull(previousRecord.getWeight())
-                    && Objects.nonNull(entity.getWeight())) {
-                Float weightDiff = entity.getWeight() - previousRecord.getWeight();
-                resultvo.setWeightDiff(weightDiff);
-            }
             return resultvo;
         }
     }
@@ -62,6 +49,37 @@ public class HealthRecordServiceImpl extends ServiceImpl<HealthRecordMapper, Hea
         wrapper.eq(HealthRecordEntity::getUserId, userId)
         .eq(HealthRecordEntity::getTargetDate, healthRecordDTO.getTargetDate());
         HealthRecordEntity existingRecord = healthRecordMapper.selectOne(wrapper);
+
+        HealthRecordEntity preRecord = healthRecordMapper.selectOne(
+                new LambdaQueryWrapper<HealthRecordEntity>()
+                        .eq(HealthRecordEntity::getUserId, userId)
+                        .lt(HealthRecordEntity::getTargetDate, healthRecordDTO.getTargetDate())
+                        .orderByDesc(HealthRecordEntity::getTargetDate)
+                        .last("LIMIT 1"));
+        
+        HealthRecordEntity nextRecord = healthRecordMapper.selectOne(
+                new LambdaQueryWrapper<HealthRecordEntity>()
+                        .eq(HealthRecordEntity::getUserId, userId)
+                        .gt(HealthRecordEntity::getTargetDate, healthRecordDTO.getTargetDate())
+                        .orderByAsc(HealthRecordEntity::getTargetDate)
+                        .last("LIMIT 1"));
+
+        // 计算体重差值并更新前后记录
+        if (Objects.nonNull(preRecord) && Objects.nonNull(healthRecordEntity.getWeight())
+            && Objects.nonNull(preRecord.getWeight())) {
+            Float weightDiff = healthRecordEntity.getWeight() - preRecord.getWeight();
+            healthRecordEntity.setWeightDiff(weightDiff);
+        } else {
+            healthRecordEntity.setWeightDiff(null);
+        }
+
+        if(Objects.nonNull(nextRecord) && Objects.nonNull(healthRecordEntity.getWeight())
+            && Objects.nonNull(nextRecord.getWeight())) {
+            Float nextWeightDiff = nextRecord.getWeight() - healthRecordEntity.getWeight();
+            nextRecord.setWeightDiff(nextWeightDiff);
+            healthRecordMapper.updateById(nextRecord);
+        }
+
         if (existingRecord != null) {
             // 更新操作
             healthRecordEntity.setId(existingRecord.getId());

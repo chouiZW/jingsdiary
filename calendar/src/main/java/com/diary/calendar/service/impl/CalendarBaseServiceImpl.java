@@ -1,6 +1,5 @@
 package com.diary.calendar.service.impl;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -14,11 +13,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.diary.calendar.constant.ResultCode;
 import com.diary.calendar.dto.CalendarBaseDTO;
 import com.diary.calendar.entity.CalendarBaseEntity;
-import com.diary.calendar.entity.UserEntity;
 import com.diary.calendar.exception.ServiceException;
 import com.diary.calendar.mapper.CalendarBaseMapper;
 import com.diary.calendar.service.CalendarBaseService;
-import com.diary.calendar.util.EntityToVoConverter;
 import com.diary.calendar.util.UserContext;
 import com.diary.calendar.vo.CalendarBaseVO;
 

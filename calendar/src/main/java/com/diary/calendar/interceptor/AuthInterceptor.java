@@ -1,6 +1,5 @@
 package com.diary.calendar.interceptor;
 
-import com.diary.calendar.entity.UserEntity;
 import com.diary.calendar.service.impl.TokenService;
 import com.diary.calendar.util.UserContext;
 import com.fasterxml.jackson.databind.ObjectMapper;

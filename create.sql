@@ -101,7 +101,7 @@ CREATE TABLE `calendar_health_record` (
   `user_id` int(11) NOT NULL COMMENT '用户ID',
   `target_date` date NOT NULL COMMENT '目标日期',
   `weight` decimal(5,1) DEFAULT NULL COMMENT '体重',
-  `weight_dff` decimal(5,1) DEFAULT NULL COMMENT '体重变化',
+  `weight_diff` decimal(5,1) DEFAULT NULL COMMENT '体重变化',
   `breakfast` varchar(500) DEFAULT NULL COMMENT '早餐食谱',
   `lunch` varchar(500) DEFAULT NULL COMMENT '午餐食谱',
   `dinner` varchar(500) DEFAULT NULL COMMENT '晚餐食谱',

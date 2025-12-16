@@ -25,7 +25,7 @@
         cb.target_week,
         cb.mark,
         chr.weight ,
-        chr.weight_dff,
+        chr.weight_diff,
         chr.breakfast,
         chr.lunch,
         chr.dinner,
