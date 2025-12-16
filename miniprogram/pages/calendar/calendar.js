@@ -1,5 +1,6 @@
 // pages/calendar.js
 const util = require('../../utils/util.js')
+const { request } = require('../../utils/request')
 import Message from 'tdesign-miniprogram/message/index';
 Page({
 
@@ -94,40 +95,32 @@ Page({
         const currentDate = new Date();
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-        let months = wx.getStorageSync('monthMarks') || [];
-        const newMarks = [];
-        // 补全当月所有日期的数据
-        for (let day = 1; day <= daysInMonth; day++) {
-            const date = new Date(year, month, day);
-            const existingMark = months.find(item => item.day === date.getTime());
-            if (!existingMark) {
-                newMarks.push({
-                    day: date.getTime(),
-                    markRemark: '',
-                    weight: null
+        request({
+            url: '/api/calendar/getDailyInfoList',
+            method: 'POST',
+            data: { targetYear: String(year), targetMonth: String(month + 1) }
+        }).then(resData => {
+            if (resData.message === 'success') {
+                // 更新数据
+                this.setData({
+                    monthMarks: resData.data
                 });
             }
-        }// 合并数据
-        const finalMarks = [...months, ...newMarks];
-        // 更新数据
-        this.setData({
-            monthMarks: finalMarks
+        }).catch(err => {
+            console.error('登录失败', err);
         });
-        wx.setStorageSync('monthMarks', finalMarks);
     },
-    calcWeightChange(day){
+    calcWeightChange(day) {
         const currentDate = new Date(day);
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
         currentDate.setHours(0, 0, 0, 0);
         let yesterday = new Date(currentDate);
-        yesterday.setDate(currentDate.getDate() -1);
+        yesterday.setDate(currentDate.getDate() - 1);
         let changeType = 'same';
-        const todayWeight ={...this.data.monthMarks.find(item => item.day === currentDate.getTime()), weightChange:'-'};
-        const yesterdayWeight = {...this.data.monthMarks.find(item => item.day === yesterday.getTime())};
-        if(!todayWeight.weight) {
+        const todayWeight = { ...this.data.monthMarks.find(item => item.day === currentDate.getTime()), weightChange: '-' };
+        const yesterdayWeight = { ...this.data.monthMarks.find(item => item.day === yesterday.getTime()) };
+        if (!todayWeight.weight) {
             todayWeight.weight = '-';
             todayWeight.weightChange = '-';
             this.setData({
@@ -137,7 +130,7 @@ Page({
             return;
         }
         const diff = todayWeight.weight - yesterdayWeight.weight;
-        if(diff > 0) {
+        if (diff > 0) {
             todayWeight.weightChange = '上升'
             changeType = 'up';
         } else if (diff < 0) {
@@ -165,7 +158,7 @@ Page({
             icon: false,
             // single: false, // 打开注释体验多个消息叠加效果
             content: '待办还处于待办状态',
-          });
+        });
     },
     markDate() {
         console.log('mark date');
@@ -259,7 +252,7 @@ Page({
             ), ...newMarks],
             showWeightDialog: false,
             selectedDates: []
-        }); 
+        });
         wx.setStorageSync('monthMarks', this.data.monthMarks);
         this.calcWeightChange(new Date());
     },
@@ -280,7 +273,7 @@ Page({
     },
     onVisibleChange(e) {
         this.setData({
-          popupVisible: e.detail.visible,
+            popupVisible: e.detail.visible,
         });
     }
 })

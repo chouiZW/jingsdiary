@@ -13,3 +13,9 @@ miniprogram/.Trashes
 
 # Node.js
 miniprogram/node_modules/
+calendar/.mvn/wrapper/maven-wrapper.properties
+.vscode/java-formatter.xml
+.vscode/settings.json
+calendar/.gitattributes
+calendar/src/main/resources/application-config.yaml
+

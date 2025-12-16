@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diary.calendar.mapper.CalendarBaseMapper">
+
+    <!--
+        查询当月的日历列表，并获取当天体重（来自 calendar_health_record.weight）
+        以及与前一天体重的差值 weight_diff（若前一天无记录则为 NULL）
+        参数:
+            - userId: 用户ID
+            - year:  年份，格式例如 "2025"
+            - month: 月份，格式例如 "12" 或 "01"
+        返回 map 列:
+            - 所有 calendar_base 的字段
+            - weight: 当天体重（来自 calendar_health_record）
+            - weight_diff: 当天体重 - 前一天体重（若前一天无记录则 NULL）
+    -->
+
+    <select id="getCalendarListWithWeight" resultType="com.diary.calendar.vo.CalendarBaseVO">
+        SELECT
+        cb.target_date,
+        cb.target_year,
+        cb.target_month,
+        cb.target_week,
+        cb.mark,
+        chr.weight ,
+        chr.weight_dff,
+        chr.breakfast,
+        chr.lunch,
+        chr.dinner,
+        chr.snack,
+        chr.calorie,
+        chr.exercise_detail
+        FROM
+        calendar_base cb
+        LEFT JOIN
+        calendar_health_record chr
+        ON cb.user_id = chr.user_id
+        AND cb.target_date = chr.target_date
+        WHERE cb.deleted = '0'
+        AND cb.user_id = #{userId}
+        AND cb.target_year = #{targetYear}
+        AND cb.target_month = #{targetMonth}
+    </select>
+
+</mapper>
