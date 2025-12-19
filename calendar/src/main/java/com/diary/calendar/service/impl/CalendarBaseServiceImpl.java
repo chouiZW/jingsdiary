@@ -1,7 +1,6 @@
 package com.diary.calendar.service.impl;
 
 import java.util.Date;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,6 +15,7 @@ import com.diary.calendar.entity.CalendarBaseEntity;
 import com.diary.calendar.exception.ServiceException;
 import com.diary.calendar.mapper.CalendarBaseMapper;
 import com.diary.calendar.service.CalendarBaseService;
+import com.diary.calendar.util.DateUtils;
 import com.diary.calendar.util.UserContext;
 import com.diary.calendar.vo.CalendarBaseVO;
 
@@ -73,15 +73,8 @@ public class CalendarBaseServiceImpl extends ServiceImpl<CalendarBaseMapper, Cal
     // 根据日期获取当天所在的年份，月份，周的信息
     private void populateDateInfo(CalendarBaseEntity entity) {
         Date date = entity.getTargetDate();
-        String yearStr = String.format("%tY", date);
-        String monthStr = String.format("%tY-%tm", date);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        int weekOfMonth = ((dayOfMonth - 1) / 7) + 1;
-        String weekStr = String.format("%tY-W%d", date, weekOfMonth);
-        entity.setTargetYear(yearStr);
-        entity.setTargetMonth(monthStr);
-        entity.setTargetWeek(weekStr);
+        entity.setTargetYear(DateUtils.getYearFromDate(date));
+        entity.setTargetMonth(DateUtils.getMonthFromDate(date));
+        entity.setTargetWeek(DateUtils.getWeekFromDate(date));
     }
 }

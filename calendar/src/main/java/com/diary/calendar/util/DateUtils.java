@@ -3,6 +3,7 @@ package com.diary.calendar.util;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Date;
 
 public class DateUtils {
     // 小程序时间戳（毫秒）转 LocalDate（默认北京时间）
@@ -21,5 +22,25 @@ public class DateUtils {
         return localDate.atStartOfDay(ZoneId.of("Asia/Shanghai"))
                 .toInstant()
                 .toEpochMilli();
+    }
+    //根据传入的Date获取当前的年(字符串类型)
+    public static String getYearFromDate(Date date) {
+        Instant instant = date.toInstant();
+        LocalDate localDate = instant.atZone(ZoneId.of("Asia/Shanghai")).toLocalDate();
+        return String.valueOf(localDate.getYear());
+    }
+    //根据传入的Date获取当前的月(字符串)
+    public static String getMonthFromDate(Date date) {
+        Instant instant = date.toInstant();
+        LocalDate localDate = instant.atZone(ZoneId.of("Asia/Shanghai")).toLocalDate();
+        int monthValue = localDate.getMonthValue();
+        return String.valueOf(monthValue);
+    }
+    //根据传入的Date类型获取当前是今年的第几周(字符串)
+    public static String getWeekFromDate(Date date) {
+        Instant instant = date.toInstant();
+        LocalDate localDate = instant.atZone(ZoneId.of("Asia/Shanghai")).toLocalDate();
+        int weekOfYear = localDate.get(java.time.temporal.IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+        return String.valueOf(weekOfYear);
     }
 }

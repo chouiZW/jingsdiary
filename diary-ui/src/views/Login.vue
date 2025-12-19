@@ -25,6 +25,7 @@
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { MessagePlugin } from 'tdesign-vue-next'
+import request, { setAuthToken } from '@/utils/request'
 
 export default {
   name: 'LoginView',
@@ -44,21 +45,30 @@ export default {
       ]
     }
 
-    const handleSubmit = ({ validateResult, firstError }) => {
+    const handleSubmit = async ({ validateResult, firstError }) => {
       if (validateResult === true) {
-        // 模拟登录逻辑
-        // 实际项目中应发送请求到后端验证
-        if (formData.username === 'admin' && formData.password === '123456') {
-          localStorage.setItem('isAuthenticated', 'true')
-          localStorage.setItem('currentUser', formData.username)
-          MessagePlugin.success('登录成功!')
-          router.push('/home')
-        } else {
-          MessagePlugin.error('用户名或密码错误!')
+        try {
+          const payload = {
+            loginType: 2,
+            account: formData.username,
+            password: formData.password,
+          }
+          const res = await request({ url: 'auth/login', method: 'POST', data: payload })
+          if (res && res.code === 200 && res.data && res.data.token) {
+            setAuthToken(res.data.token)
+            localStorage.setItem('isAuthenticated', 'true')
+            localStorage.setItem('currentUser', formData.username)
+            MessagePlugin.success('登录成功!')
+            router.push('/home')
+          } else {
+            MessagePlugin.error(res?.msg || '登录失败')
+          }
+        } catch (e) {
+          MessagePlugin.error(e.message || '登录异常')
         }
       } else {
-         console.log('Errors: ', firstError);
-         MessagePlugin.warning(firstError);
+        console.log('Errors: ', firstError)
+        MessagePlugin.warning(firstError)
       }
     }
 

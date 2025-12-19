@@ -35,7 +35,7 @@
                 <view class="weight-label">较前日变化</view>
                 <view class="weight-change {{'weight-change--' + changeType}}">
                     <i class="iconfont icon-arrow-down"></i>
-                    <span class="change-value">{{today.weightChange}}</span>
+                    <span class="change-value">{{today.weightDiff}}</span>
                     <!-- <span class="weight-unit">斤</span> -->
                 </view>
             </view>
